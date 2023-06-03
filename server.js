@@ -152,6 +152,25 @@ app.get("/", (req, res) => {
  *     tags: [Posts]
  *     security:
  *       - BearerAuth: []
+ *     parameters:
+ *       - name: Authorization
+ *         in: header
+ *         description: Token de autenticación (Bearer token)
+ *         required: true
+ *         type: string
+ *       - name: userId
+ *         in: query
+ *         description: ID del usuario
+ *         required: false
+ *         schema:
+ *           type: integer
+ *       - name: limit
+ *         in: query
+ *         description: Límite de resultados
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 10
  *     responses:
  *       200:
  *         description: Respuesta exitosa
