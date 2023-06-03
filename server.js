@@ -4,10 +4,16 @@ const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const users = [];
 
+const http = require("http");
+
 const bodyParser = require("body-parser");
 
 const app = express();
 const PORT = 3000;
+
+const server = app.listen(PORT, () => {
+  console.log(`Servidor en ejecución en el puerto ${PORT}`);
+});
 
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
@@ -47,17 +53,18 @@ app.use(bodyParser.json());
  *     summary: Iniciar sesión
  *     description: Inicia sesión en la API con las credenciales proporcionadas
  *     tags: [Autenticación]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               username:
- *                 type: string
- *               password:
- *                 type: string
+ *     parameters:
+ *       - in: body
+ *         name: credentials
+ *         description: Credenciales de inicio de sesión
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             username:
+ *               type: string
+ *             password:
+ *               type: string
  *     responses:
  *       200:
  *         description: Inicio de sesión exitoso
@@ -202,9 +209,6 @@ app.get("/posts/:id", async (req, res) => {
     res.status(500).json({ error: "Error al obtener el post" });
   }
 });
-app.listen(PORT, () => {
-  console.log(`Servidor en ejecución en el puerto ${PORT}`);
-});
 
 // Define la configuración de Swagger
 const swaggerOptions = {
@@ -229,3 +233,5 @@ const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 // Agrega la ruta de Swagger a tu API
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+module.exports = server;
